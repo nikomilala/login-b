@@ -13,11 +13,13 @@
         <!-- Scripts -->
 {{--        @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        @stack('scripts')
     </body>
 </html>

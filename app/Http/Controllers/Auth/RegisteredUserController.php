@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use App\Rules\Recaptcha;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -42,7 +42,8 @@ class RegisteredUserController extends Controller
                 ->symbols()
                 ->uncompromised(),'confirmed'
             ],
-            'password_confirmation' => 'required|same:password'
+            'recaptcha_token' => ['required', new Recaptcha($request->recaptcha_token)]
+
         ]);
 
         $user = User::create([
@@ -57,4 +58,5 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
 }

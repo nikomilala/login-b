@@ -9,8 +9,10 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" id="registerForm">
+
             @csrf
+            <input  class="g-recaptcha" type="hidden" name="recaptcha_token" id="recaptcha_token">
 
             <!-- Name -->
             <div>
@@ -56,4 +58,18 @@
             </div>
         </form>
     </x-auth-card>
+    @push('scripts')
+        <script>
+            grecaptcha.ready(function () {
+                document.getElementById('registerForm').addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', { action: 'register' })
+                        .then(function (token) {
+                            document.getElementById("recaptcha_token").value = token;
+                            document.getElementById('registerForm').submit();
+                        });
+                });
+            });
+        </script>
+    @endpush
 </x-guest-layout>
